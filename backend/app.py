@@ -1,9 +1,9 @@
-# backend/app.py
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
+from pydantic import BaseModel  # ← Adicione esta importação
 import os
 
 # Configuração do banco de dados
@@ -20,6 +20,20 @@ class Item(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True)
     description = Column(String, index=True)
+
+# Modelo Pydantic para criação
+class ItemCreate(BaseModel):
+    name: str
+    description: str
+
+# Modelo Pydantic para resposta
+class ItemResponse(BaseModel):
+    id: int
+    name: str
+    description: str
+
+    class Config:
+        from_attributes = True
 
 # Criar tabelas
 Base.metadata.create_all(bind=engine)
@@ -47,14 +61,15 @@ def get_db():
 def read_root():
     return {"message": "Hello from Python Backend with PostgreSQL!"}
 
-@app.get("/api/items")
+@app.get("/api/items", response_model=list[ItemResponse])
 def get_items(db: Session = Depends(get_db)):
     items = db.query(Item).all()
-    return {"items": items}
+    return items
 
-@app.post("/api/items")
-def create_item(name: str, description: str, db: Session = Depends(get_db)):
-    db_item = Item(name=name, description=description)
+# ROTA ATUALIZADA - Agora aceita JSON!
+@app.post("/api/items", response_model=ItemResponse)
+def create_item(item: ItemCreate, db: Session = Depends(get_db)):
+    db_item = Item(name=item.name, description=item.description)
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
