@@ -6,6 +6,25 @@ from sqlalchemy.orm import sessionmaker, Session
 from pydantic import BaseModel  # ← Adicione esta importação
 import os
 
+# ✅ CORREÇÃO: Configuração robusta do banco de dados
+def get_database_url():
+    # No Railway, use DATABASE_URL fornecida
+    database_url = os.environ.get('DATABASE_URL')
+    if database_url:
+        return database_url
+    
+    # No local, construa a URL das variáveis individuais
+    user = os.environ.get('POSTGRES_USER', 'postgres')
+    password = os.environ.get('POSTGRES_PASSWORD', '')
+    host = os.environ.get('POSTGRES_HOST', 'localhost')
+    port = os.environ.get('POSTGRES_PORT', '5432')
+    database = os.environ.get('POSTGRES_DB', 'postgres')
+    
+    return f"postgresql://{user}:{password}@{host}:{port}/{database}"
+
+# ✅ Use a função para obter a URL
+database_url = get_database_url()
+print(f"Conectando ao banco: {database_url}")  # Debug
 # Configuração do banco de dados
 engine = create_engine(os.environ.get('DATABASE_URL'))
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
