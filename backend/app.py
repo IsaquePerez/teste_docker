@@ -60,7 +60,7 @@ app = FastAPI()
 # Configurar CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "https://teste-docker.vercel.app/"],
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000", "https://testedocker-production-4e85.up.railway.app", "https://teste-docker.vercel.app/", "https://*.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
