@@ -7,8 +7,8 @@ function App() {
 
   useEffect(() => {
     // Use a URL completa do backend - IMPORTANTE!
-    // fetch('http://localhost:8000/api/items')
-    fetch('https://testedocker-production-4e85.up.railway.app/api/items')
+    //fetch('https://testedocker-production-4e85.up.railway.app/api/items')
+    fetch('http://localhost:8000/api/v1/sistemas')
       .then(response => {
         if (!response.ok) {
           throw new Error('Erro na resposta da API')
@@ -39,9 +39,9 @@ function App() {
         ) : (
           <ul style={{ listStyleType: 'none', }}>
             
-            {data.map(item => (
-              <li key={item.id}>
-                <strong>{item.name}</strong> - {item.description}
+            {data.map(sistemas => (
+              <li key={sistemas.id}>
+                <strong>{sistemas.nome}</strong> - {sistemas.descricao}
               </li>
             ))}
           </ul>

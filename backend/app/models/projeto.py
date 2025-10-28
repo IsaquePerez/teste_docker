@@ -25,6 +25,6 @@ class Projeto(Base):
     # Relacionamentos
     modulo = relationship("Modulo", back_populates="projetos", foreign_keys=[modulo_id])
     sistema = relationship("Sistema", back_populates="projetos", foreign_keys=[sistema_id])
-    responsavel = relationship("Usuario", back_populates="usuarios", foreign_keys=[responsavel_id])
+    responsavel = relationship("Usuario", back_populates="projetos_responsavel", foreign_keys=[responsavel_id])
     casos_teste = relationship("CasoTeste", back_populates="projeto", foreign_keys="[CasoTeste.projeto_id]")
     metricas_rel = relationship("Metrica", back_populates="projeto", foreign_keys="[Metrica.projeto_id]")
