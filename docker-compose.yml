@@ -17,7 +17,12 @@ services:
       retries: 5
 
   backend:
-    build: ./backend
+    build: 
+      context: ./backend
+      # Para controlar o build
+      args:
+        # Mude para 'true' se você tiver o nwrfcsdk.zip "ARQUIVO DO SAP"
+        - WITH_SAP=false
     ports:
       - "${BACKEND_PORT}:8000"
     volumes:
